@@ -1,52 +1,65 @@
 #pragma once
+#include <iostream>
 
-template <class T, typename A>
+template <typename T>
 class Array
 {
-	public:
-		T* a;
-		A size(void) const
-		{
-			return ();
-		}
 	private:
+		T*		a;
+		size_t	len;
+	public:
+		size_t	size(void) const
+		{
+			return (len);
+		}
 		Array()
 		{
-			// this->a =  new T[]; // proof that i've got yet lot to learn
-			// this->a =  new T;
-			// this->a =  new *T;
-			/* conclussion: ban el petk chi stegh grem, vortev obj initialize-acneluc
-			default constructora kanchvum u member atributnern el en steghtsvum, rigth? */
-			///TODO: CPP-ner@ prtsneluc miat xor@ usumnasiri (PXRT vids)
+			a = NULL;
+			len = 0;
 		}
 		Array(unsigned int n)
 		{
-			this->a =  new T[n];
+			len = n;
+			this->a =  new T[len];
+			for (size_t i = 0; i < len; i++)
+				this->a[i] = T();
 		}
 		Array(const Array& obj)
 		{
-			this->a = obj.a;
+			a = NULL;
+			*this = obj;
 		}
 		Array& operator=(const Array& obj)
 		{
 			if(this == &obj)
 				return(*this);
-			this->a = obj.a;
+
+			delete[] a;
+
+			a = new T[obj.len];
+			for (size_t i = 0; i < obj.len; i++)
+				this->a[i] = obj.a[i];
+
+			len = obj.len;
+
 			return(*this);
 		}
-		~Array();
-};
+		~Array()
+		{
+			delete[] a;
+		}
 
-// xi einq esi durs@ anum?
-Array& operator[](const Array& obj)
-{
-	try
-	{
-		// obj.a ????
-		throw();
-	}
-	catch(...) // std::exception
-	{
-		
-	}
-}
+		T& operator[](size_t i)
+		{
+			if (i >= len)
+				throw std::runtime_error("Out of bounds");
+			return a[i];
+		}
+
+		const T& operator[](size_t i) const
+		{
+			if (i >= len)
+				throw std::runtime_error("Out of bounds");
+			return a[i];
+		}
+};
